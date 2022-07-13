@@ -13,11 +13,22 @@ const express = require('express');
 const router = express.Router();
 
 // GET /api/vouchers/generate
-router.get('/generate', (req, res) => {
+router.get('/generate/:sizeParam?', (req, res) => {
   let listOfRandomNumbers = [];
+  let size;
 
   if (req.body && req.body.size && parseInt(req.body.size)) {
-    let size = parseInt(req.body.size);
+    size = parseInt(req.body.size);
+
+    for (let i = 0; i < size; i++) {
+      listOfRandomNumbers.push(generateRandomNumber());
+    }
+  } else if (
+    req.params &&
+    req.params.sizeParam &&
+    parseInt(req.params.sizeParam)
+  ) {
+    size = parseInt(req.params.sizeParam);
 
     for (let i = 0; i < size; i++) {
       listOfRandomNumbers.push(generateRandomNumber());
