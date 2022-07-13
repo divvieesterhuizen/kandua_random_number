@@ -14,30 +14,20 @@ const router = express.Router();
 
 // GET /api/vouchers/generate
 router.get('/generate/:sizeParam?', (req, res) => {
-  let listOfRandomNumbers = [];
-  let size;
+  let listOfRandomNumbers = new Set();
+  let n = 1;
 
-  if (req.body && req.body.size && parseInt(req.body.size)) {
-    size = parseInt(req.body.size);
+  if (req.params && req.params.sizeParam && parseInt(req.params.sizeParam)) {
+    n = parseInt(req.params.sizeParam);
 
-    for (let i = 0; i < size; i++) {
-      listOfRandomNumbers.push(generateRandomNumber());
-    }
-  } else if (
-    req.params &&
-    req.params.sizeParam &&
-    parseInt(req.params.sizeParam)
-  ) {
-    size = parseInt(req.params.sizeParam);
-
-    for (let i = 0; i < size; i++) {
-      listOfRandomNumbers.push(generateRandomNumber());
+    while (listOfRandomNumbers.size <= n) {
+      listOfRandomNumbers.add(generateRandomNumber());
     }
   } else {
-    listOfRandomNumbers.push(generateRandomNumber());
+    listOfRandomNumbers.add(generateRandomNumber());
   }
 
-  res.json(listOfRandomNumbers);
+  res.json(Array.from(listOfRandomNumbers));
 });
 
 // HELPER FUNCTIONS
